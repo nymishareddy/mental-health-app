@@ -260,7 +260,7 @@ function getSmartFallback(message) {
 }
 
 export async function chatbotReply(message, retryCount = 0) {
-  const token = "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";
+  const token = process.env.REACT_APP_HF_TOKEN;
 
   try {
     const res = await fetch(
