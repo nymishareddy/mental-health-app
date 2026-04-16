@@ -1,6 +1,6 @@
 # 🧠 MindCare AI — Mental Health Monitoring System
 
-> **Final Year B.Tech Project** — AI-Based Mental Health Monitoring and Support System for Students
+> AI-Based Mental Health Monitoring and Support System for Students
 
 A full-stack, AI-powered web application that helps students track **Stress**, **Anxiety**, and **Depression** through validated assessments, an empathetic AI chatbot (Mira), a private journal with sentiment analysis, and personalized wellness recommendations — with a privacy-first teacher dashboard.
 
@@ -115,7 +115,7 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
-### Step 3 — Set Up the Backend (Optional)
+### Step 3 — Set Up the Backend 
 
 ```bash
 cd ../backend
@@ -136,7 +136,6 @@ DB_USER=root
 DB_PASSWORD=your_mysql_password
 DB_NAME=mindcare_db
 JWT_SECRET=pick_a_long_random_string
-ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 Start the backend:
@@ -256,7 +255,7 @@ Score ranges: **0–44 Low** · **45–69 Moderate** · **70–100 High Risk**
 ## 📝 Project Report Notes
 
 This project demonstrates:
-1. **AI Integration** — Real-time Claude API for chatbot, assessment analysis, and sentiment detection
+1. **AI Integration** — Real-time API for chatbot, assessment analysis, and sentiment detection
 2. **Full-Stack Architecture** — Separated React frontend + Express backend with REST APIs
 3. **Database Design** — Normalized MySQL schema with 8 tables and foreign key relationships
 4. **Privacy-First Design** — Role-based access control with JWT authentication
@@ -265,4 +264,4 @@ This project demonstrates:
 
 ---
 
-*MindCare AI — Built as a Final Year B.Tech Project*
+*MindCare AI*
