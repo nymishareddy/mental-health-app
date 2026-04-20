@@ -122,9 +122,77 @@ export async function loginUser(email, password, role) {
   }
 }
 
-/**
- * Submit assessment result to backend.
- */
+export async function signupUser(userData) {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/auth/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Signup fetch error:", err);
+    return { success: false, message: "Backend unavailable" };
+  }
+}
+
+export async function getTeacherAnalytics() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/assessment/analytics`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Dashboard error:", err);
+    return null;
+  }
+}
+
+export async function sendRiskAlert(studentId, type) {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/teacher/send-alert`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ studentId, type })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("SMTP Alert failure:", err);
+    return { success: false };
+  }
+}
+
+export async function assignCounselor(studentId, counselorName) {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/teacher/assign-counselor`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ studentId, counselorName })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Counselor assign error:", err);
+    return { success: false };
+  }
+}
+
+export async function getAlertsStatus() {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/teacher/alerts-status`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Status fetch error:", err);
+    return { success: false, statusMap: {} };
+  }
+}
+
 export async function submitAssessment(userId, type, score, answers) {
   try {
     const token = localStorage.getItem("token");

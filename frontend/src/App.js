@@ -9,6 +9,7 @@ import ChatbotPage        from "./pages/ChatbotPage";
 import JournalPage        from "./pages/JournalPage";
 import RecommendationsPage from "./pages/RecommendationsPage";
 import ProfilePage        from "./pages/ProfilePage";
+import CounselorsPage     from "./pages/CounselorsPage";
 import TeacherDashboard   from "./pages/TeacherDashboard";
 import RiskAlertsPage     from "./pages/RiskAlertsPage";
 import AnalyticsPage      from "./pages/AnalyticsPage";
@@ -113,6 +114,8 @@ function App() {
         return <AssessmentPage type="anxiety"    user={user} onComplete={handleTestComplete} />;
       case "depression-test":
         return <AssessmentPage type="depression" user={user} onComplete={handleTestComplete} />;
+      case "counselors":
+        return <CounselorsPage />;
       case "chatbot":
         return <ChatbotPage user={user} />;
       case "journal":

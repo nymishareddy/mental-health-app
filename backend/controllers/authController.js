@@ -40,8 +40,16 @@ exports.login = async (req, res) => {
     }
 
     const token = signToken({ id: user.id, role: user.role });
-    const { password: _pw, ...safeUser } = user;
-    res.json({ success: true, token, user: safeUser });
+    res.json({ 
+      success: true, 
+      token, 
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      } 
+    });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ success: false, message: "Server error during login." });
@@ -51,7 +59,10 @@ exports.login = async (req, res) => {
 // ── POST /api/signup ──────────────────────────────────────────
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password, role, dept, age } = req.body;
+    console.log("Signup data:", req.body);
+    const { name, email, password, dept, age } = req.body;
+    const role = req.body.role || "student";
+    
     if (!name || !email || !password) {
       return res.status(400).json({ success: false, message: "Name, email, and password are required." });
     }
@@ -71,13 +82,13 @@ exports.signup = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const userId = await User.create({ name, email, hashedPassword, role: role || "student", dept, age });
+    const userId = await User.create({ name, email, hashedPassword, role, dept, age });
 
-    const token = signToken({ id: userId, role: role || "student" });
+    const token = signToken({ id: userId, role });
     res.status(201).json({
       success: true,
       token,
-      user: { id: userId, name, email, role: role || "student", dept, age },
+      user: { id: userId, name, email, role, dept, age },
     });
   } catch (err) {
     console.error("Signup error:", err);

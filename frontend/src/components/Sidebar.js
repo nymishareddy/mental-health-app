@@ -6,6 +6,7 @@ const STUDENT_NAV = [
   { id: "stress-test",     icon: "😤", label: "Stress Test"    },
   { id: "anxiety-test",    icon: "😰", label: "Anxiety Test"   },
   { id: "depression-test", icon: "😞", label: "Depression Test"},
+  { id: "counselors",      icon: "🩺", label: "Counselors"     },
   { id: "chatbot",         icon: "💬", label: "AI Chatbot"     },
   { id: "journal",         icon: "📔", label: "My Journal"     },
   { id: "recommendations", icon: "🌟", label: "Recommendations"},

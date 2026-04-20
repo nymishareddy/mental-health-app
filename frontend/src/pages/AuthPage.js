@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DEMO_USERS } from "../data/mockData";
-import { loginUser } from "../utils/api";
+import { loginUser, signupUser } from "../utils/api";
 
 function AuthPage({ onLogin }) {
   const [mode, setMode]     = useState("login");
@@ -10,33 +10,43 @@ function AuthPage({ onLogin }) {
   const [error, setError]   = useState("");
 
   const handleSubmit = async () => {
-  if (!form.email || !form.password) {
-    setError("Please fill all required fields.");
-    return;
-  }
-
-  setLoading(true);
-  setError("");
-
-  try {
-    // 🔥 Call backend API
-    const res = await loginUser(form.email, form.password, role);
-
-    console.log("LOGIN RESPONSE:", res);
-     if (res && res.success) {
-  localStorage.setItem("token", res.token); // 🔥 ADD THIS LINE
-  onLogin(res.user);
-}
-     else {
-      setError("Invalid email or password");
+    if (!form.email || !form.password || (mode === "signup" && !form.name)) {
+      setError("Please fill all required fields.");
+      return;
     }
-  } catch (err) {
-    console.error("Login error:", err);
-    setError("Something went wrong. Try again.");
-  }
 
-  setLoading(false);
-};
+    setLoading(true);
+    setError("");
+
+    try {
+      let res;
+      if (mode === "signup") {
+        res = await signupUser({ 
+          name: form.name, 
+          email: form.email, 
+          password: form.password, 
+          role: role, 
+          dept: form.dept, 
+          age: form.age 
+        });
+      } else {
+        res = await loginUser(form.email, form.password, role);
+      }
+
+      console.log("AUTH RESPONSE:", res);
+      if (res && res.success) {
+        localStorage.setItem("token", res.token);
+        onLogin(res.user);
+      } else {
+        setError(res?.message || "Invalid email or password");
+      }
+    } catch (err) {
+      console.error("Auth error:", err);
+      setError("Something went wrong. Try again.");
+    }
+
+    setLoading(false);
+  };
 
   const loginAsDemo = (demoRole) => onLogin(DEMO_USERS[demoRole]);
 
