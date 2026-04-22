@@ -6,17 +6,17 @@
  * Returns risk metadata for a given score (0–100).
  */
 export const getRiskLevel = (score) => {
-  if (score >= 70) return { label: "High Risk",  color: "#ef4444", bg: "#fef2f2", emoji: "⚠️" };
-  if (score >= 45) return { label: "Moderate",   color: "#f59e0b", bg: "#fffbeb", emoji: "📊" };
-  return               { label: "Low Risk",   color: "#22c55e", bg: "#f0fdf4", emoji: "✅" };
+  if (score >= 80) return { label: "High Risk",  color: "#ef4444", bg: "#fef2f2", emoji: "⚠️" };
+  if (score >= 50) return { label: "Moderate",   color: "#f59e0b", bg: "#fffbeb", emoji: "📊" };
+  return               { label: "Normal",     color: "#22c55e", bg: "#f0fdf4", emoji: "✅" };
 };
 
 /**
  * Returns a CSS color string based on score severity.
  */
 export const getScoreColor = (score) => {
-  if (score >= 70) return "#ef4444";
-  if (score >= 45) return "#f59e0b";
+  if (score >= 80) return "#ef4444";
+  if (score >= 50) return "#f59e0b";
   return "#22c55e";
 };
 
@@ -36,12 +36,15 @@ export const calculateScore = (answers, maxPerQ) => {
  */
 export const getSentimentStyle = (sentiment) => {
   const map = {
-    positive: { color: "#22c55e", bg: "#f0fdf4", icon: "😊", label: "Positive"        },
-    neutral:  { color: "#6b7280", bg: "#f9fafb", icon: "😐", label: "Neutral"          },
-    negative: { color: "#ef4444", bg: "#fef2f2", icon: "😔", label: "Needs Attention"  },
-    anxious:  { color: "#f59e0b", bg: "#fffbeb", icon: "😰", label: "Anxious"          },
+    "Good":            { color: "#22c55e", bg: "#f0fdf4", icon: "😊", label: "Good"              },
+    "Moderate":        { color: "#6b7280", bg: "#f9fafb", icon: "😐", label: "Moderate"          },
+    "Needs Attention": { color: "#ef4444", bg: "#fef2f2", icon: "⚠️", label: "Needs Attention"   },
+    // fallback keeping old keys just in case legacy records trigger
+    "positive":        { color: "#22c55e", bg: "#f0fdf4", icon: "😊", label: "Good"              },
+    "neutral":         { color: "#6b7280", bg: "#f9fafb", icon: "😐", label: "Moderate"          },
+    "negative":        { color: "#ef4444", bg: "#fef2f2", icon: "⚠️", label: "Needs Attention"   },
   };
-  return map[sentiment] || map.neutral;
+  return map[sentiment] || map["Moderate"];
 };
 
 /**
@@ -55,7 +58,7 @@ export const formatMarkdown = (text) =>
 /**
  * Returns true when any score exceeds the high-risk threshold.
  */
-export const hasHighRisk = (scores, threshold = 70) =>
+export const hasHighRisk = (scores, threshold = 80) =>
   scores.stress >= threshold ||
   scores.anxiety >= threshold ||
   scores.depression >= threshold;

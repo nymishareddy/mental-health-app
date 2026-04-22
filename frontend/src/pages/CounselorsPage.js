@@ -9,23 +9,23 @@ function CounselorsPage() {
       icon: "🧘‍♂️",
       color: "#ef4444",
       bio: "Behavioral specialist focused on stress reduction and academic pressure relief.",
-      contact: "dr.sharma@mindcare.demo",
+      contact: "dr.sharma@swasthya.demo",
     },
     {
       name: "Dr. Mehta",
-      specialty: "Anxiety Disorders",
+      specialty: "Anxiety & Panic Disorders",
       icon: "🌬️",
       color: "#f59e0b",
       bio: "Dedicated clinician assisting students in navigating severe anxiety pathways.",
-      contact: "dr.mehta@mindcare.demo",
+      contact: "dr.mehta@swasthya.demo",
     },
     {
       name: "Dr. Rao",
-      specialty: "Depression Counseling",
+      specialty: "Depression and Mood",
       icon: "🫂",
       color: "#8b5cf6",
       bio: "Providing an empathetic open door for students dealing with depressive periods.",
-      contact: "dr.rao@mindcare.demo",
+      contact: "dr.rao@swasthya.demo",
     },
   ];
 

@@ -40,8 +40,14 @@ function ProfilePage({ user,scores = { stress: 0, anxiety: 0, depression: 0 }, o
           <h2 style={{ fontWeight: 700, fontSize: 18, color: "var(--gray-900)", marginBottom: 4 }}>
             {user?.name}
           </h2>
-          <p style={{ fontSize: 14, color: "var(--gray-500)", marginBottom: 16 }}>
+          <p style={{ fontSize: 14, color: "var(--gray-500)", marginBottom: 8 }}>
             {user?.email}
+          </p>
+          <p style={{ fontSize: 13, color: "var(--gray-500)", marginBottom: 4 }}>
+            Dept: {user?.dept || "Not specified"}
+          </p>
+          <p style={{ fontSize: 13, color: "var(--gray-500)", marginBottom: 16 }}>
+            Age: {user?.age || "Not specified"}
           </p>
           <div
             style={{

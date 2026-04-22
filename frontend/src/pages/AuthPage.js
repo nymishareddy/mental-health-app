@@ -84,7 +84,7 @@ function AuthPage({ onLogin }) {
           <h1
             style={{ fontFamily: "var(--font-display)", fontSize: 28, color: "var(--gray-900)" }}
           >
-            MindCare AI
+            Swasthya Initiative
           </h1>
           <p style={{ color: "var(--gray-500)", fontSize: 14, marginTop: 6 }}>
             Mental Health Monitoring for Students

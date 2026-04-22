@@ -13,6 +13,7 @@ import CounselorsPage     from "./pages/CounselorsPage";
 import TeacherDashboard   from "./pages/TeacherDashboard";
 import RiskAlertsPage     from "./pages/RiskAlertsPage";
 import AnalyticsPage      from "./pages/AnalyticsPage";
+import SupportStatusPage  from "./pages/SupportStatusPage";
 import { getUserData, getJournalEntries } from "./utils/api";
 
 // Components
@@ -116,6 +117,8 @@ function App() {
         return <AssessmentPage type="depression" user={user} onComplete={handleTestComplete} />;
       case "counselors":
         return <CounselorsPage />;
+      case "support":
+        return <SupportStatusPage />;
       case "chatbot":
         return <ChatbotPage user={user} />;
       case "journal":

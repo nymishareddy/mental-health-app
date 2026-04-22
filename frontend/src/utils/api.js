@@ -1,9 +1,9 @@
 // ============================================================
 // API UTILITIES
-// Centralises all calls to Claude AI and backend REST endpoints.
+// Centralises all calls and backend REST endpoints.
 // ============================================================
-import Sentiment from "sentiment";
-const sentimentAnalyzer = new Sentiment();
+//import Sentiment from "sentiment";
+//const sentimentAnalyzer = new Sentiment();
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
@@ -75,26 +75,37 @@ Guidelines:
   return { content, sentiment };
 }
 
-/**
- * Analyses the sentiment of a journal entry.
- * @param {string} text
- * @returns {Promise<{sentiment, score, reflection}>}
- */
 export async function analyseJournalSentiment(text) {
-  const result = sentimentAnalyzer.analyze(text);
+  const msg = text.toLowerCase();
+  
+  const highRiskWords = ["stress", "stressed", "overwhelmed", "anxious", "panic", "depressed", "tired", "exhausted", "burnout", "pressure", "hopeless"];
+  const moderateWords = ["okay", "fine", "manageable", "a bit stressed", "slightly anxious", "not bad"];
+  const positiveWords = ["happy", "relaxed", "calm", "good", "peaceful", "motivated", "confident"];
+  
+  let highScore = 0;
+  let modScore = 0;
+  let posScore = 0;
 
-  let sentiment = "neutral";
+  // Track matched words for dynamic reflection string construction
+  let matchedHigh = [];
+  let matchedPos = [];
+
+  highRiskWords.forEach(w => { if (msg.includes(w)) { highScore++; matchedHigh.push(w); } });
+  moderateWords.forEach(w => { if (msg.includes(w)) modScore++; });
+  positiveWords.forEach(w => { if (msg.includes(w)) { posScore++; matchedPos.push(w); } });
+
+  let sentiment = "Moderate";
   let score = 50;
-  let reflection = "You're doing okay. Keep going.";
+  let reflection = "You seem to be navigating the day steadily. Keep finding your balance and lean into the stable moments.";
 
-  if (result.score > 2) {
-    sentiment = "positive";
-    score = 80;
-    reflection = "That's great to hear! Keep maintaining this positivity.";
-  } else if (result.score < -2) {
-    sentiment = "negative";
-    score = 30;
-    reflection = "It seems like you're going through something difficult. Take care of yourself.";
+  if (highScore > modScore && highScore >= posScore) {
+    sentiment = "Needs Attention";
+    score = Math.max(10, 50 - (highScore * 15)); 
+    reflection = `I noticed you're feeling ${matchedHigh[0] || 'distressed'}. It's completely valid to feel this way. Please remember to go easy on yourself and take a restorative breather.`;
+  } else if (posScore > modScore && posScore >= highScore) {
+    sentiment = "Good";
+    score = Math.min(100, 60 + (posScore * 15));
+    reflection = `It sounds like you're feeling ${matchedPos[0] || 'uplifted'}. That’s wonderful! Notice what brought you this feeling and try to hold onto it.`;
   }
 
   return { sentiment, score, reflection };
@@ -141,7 +152,13 @@ export async function getTeacherAnalytics() {
   if (!token) return null;
   try {
     const res = await fetch(`${BACKEND_URL}/api/assessment/analytics`, {
-      headers: { Authorization: `Bearer ${token}` }
+      method: "GET",
+      cache: "no-store",
+      headers: { 
+        "Authorization": `Bearer ${token}`,
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache"
+      }
     });
     return await res.json();
   } catch (err) {
@@ -165,13 +182,13 @@ export async function sendRiskAlert(studentId, type) {
   }
 }
 
-export async function assignCounselor(studentId, counselorName) {
+export async function assignCounselor(studentId, type, counselorName) {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(`${BACKEND_URL}/api/teacher/assign-counselor`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ studentId, counselorName })
+      body: JSON.stringify({ studentId, type, counselorName })
     });
     return await res.json();
   } catch (err) {
@@ -184,12 +201,63 @@ export async function getAlertsStatus() {
   const token = localStorage.getItem("token");
   try {
     const res = await fetch(`${BACKEND_URL}/api/teacher/alerts-status`, {
-      headers: { Authorization: `Bearer ${token}` }
+      method: "GET",
+      cache: "no-store",
+      headers: { 
+        "Authorization": `Bearer ${token}`,
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache"
+      }
     });
     return await res.json();
   } catch (err) {
     console.error("Status fetch error:", err);
     return { success: false, statusMap: {} };
+  }
+}
+
+export async function updateSessionStatus(studentId, type, status) {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/teacher/update-status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ studentId, type, status })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Update assign error:", err);
+    return { success: false };
+  }
+}
+
+export async function completeSession(studentId, type, notes) {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/teacher/complete-session`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ studentId, type, notes })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Complete session error:", err);
+    return { success: false };
+  }
+}
+
+export async function scheduleFollowup(studentId, type, date) {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/teacher/schedule-followup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ studentId, type, date })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Followup schedule error:", err);
+    return { success: false };
   }
 }
 
@@ -256,6 +324,24 @@ export async function getJournalEntries(userId) {
     return await res.json();
   } catch {
     return [];
+  }
+}
+
+export async function getStudentSupport() {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/assessment/my-support`, {
+      method: "GET",
+      cache: "no-store",
+      headers: { 
+        "Authorization": `Bearer ${token}`,
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache"
+      }
+    });
+    return await res.json();
+  } catch (err) {
+    return { success: false };
   }
 }
 

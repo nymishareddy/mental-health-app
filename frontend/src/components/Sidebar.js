@@ -7,6 +7,7 @@ const STUDENT_NAV = [
   { id: "anxiety-test",    icon: "😰", label: "Anxiety Test"   },
   { id: "depression-test", icon: "😞", label: "Depression Test"},
   { id: "counselors",      icon: "🩺", label: "Counselors"     },
+  { id: "support",         icon: "🛡️", label: "My Support"     },
   { id: "chatbot",         icon: "💬", label: "AI Chatbot"     },
   { id: "journal",         icon: "📔", label: "My Journal"     },
   { id: "recommendations", icon: "🌟", label: "Recommendations"},
@@ -66,7 +67,7 @@ function Sidebar({ user, activePage, onNavigate, onLogout }) {
                 color: "white",
               }}
             >
-              MindCare AI
+              Swasthya Initiative
             </div>
             <div
               style={{

@@ -213,8 +213,8 @@ function JournalPage({ user, entries: propEntries, setEntries: propSetEntries })
               size={120}
             />
             <div style={{ marginTop: 20 }}>
-              {["positive", "neutral", "negative"].map((s) => {
-                const count   = entries.filter((e) => e.sentiment === s).length;
+              {["Good", "Moderate", "Needs Attention"].map((s) => {
+                const count   = entries.filter((e) => e.sentiment === s || (e.sentiment === 'positive' && s === 'Good') || (e.sentiment === 'negative' && s === 'Needs Attention') || (e.sentiment === 'neutral' && s === 'Moderate')).length;
                 const pct     = Math.round((count / entries.length) * 100) || 0;
                 const style   = getSentimentStyle(s);
                 return (

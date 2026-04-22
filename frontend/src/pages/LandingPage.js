@@ -11,7 +11,7 @@ function LandingPage({ onGetStarted }) {
   ];
 
   const techStack = [
-    "React.js", "Claude AI API", "Chart.js", "MySQL Schema", "Python ML", "Sentiment Analysis",
+    "React.js", "Chart.js", "MySQL Schema", "Python ML", "Sentiment Analysis",
   ];
 
   return (
@@ -49,7 +49,7 @@ function LandingPage({ onGetStarted }) {
                 color: "var(--gray-900)",
               }}
             >
-              MindCare AI
+              Swasthya Initiative
             </span>
           </div>
           <button className="btn btn-primary" onClick={onGetStarted}>
@@ -59,21 +59,6 @@ function LandingPage({ onGetStarted }) {
 
         {/* ── Hero ── */}
         <div style={{ textAlign: "center", padding: "80px 0 60px" }}>
-          <div
-            style={{
-              display: "inline-block",
-              background: "var(--sky)",
-              color: "var(--blue-dark)",
-              borderRadius: 20,
-              padding: "6px 16px",
-              fontSize: 13,
-              fontWeight: 600,
-              marginBottom: 24,
-            }}
-          >
-            🎓 Final Year B.Tech Project — AI in Mental Health
-          </div>
-
           <h1
             style={{
               fontFamily: "var(--font-display)",

@@ -154,3 +154,63 @@ exports.getAnalytics = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error calculating analytics." });
   }
 };
+
+exports.getMySupport = async (req, res) => {
+  try {
+    const studentId = req.user.id;
+    // Get ALL counselor assignments for the logged-in student (one for each type)
+    const [counselorRows] = await db.query(
+      "SELECT type, counselor_name as assignedCounselor, status, session_notes as sessionNotes, completed_at, follow_up_date as followUpDate FROM counselor_assignments WHERE student_id = ? ORDER BY completed_at DESC",
+      [studentId]
+    );
+
+    if (counselorRows.length === 0) {
+      return res.json({ success: true, supports: [] });
+    }
+
+    const supports = [];
+
+    for (const r of counselorRows) {
+      const support = {
+        type: r.type,
+        assignedCounselor: r.assignedCounselor,
+        status: r.status,
+        sessionNotes: r.sessionNotes,
+        completedAt: r.completed_at,
+        followUpDate: r.followUpDate,
+      };
+
+      // Calculate outcome if completed
+      if (r.status === 'completed' && r.completed_at) {
+        let tableName;
+        if (r.type === 'stress') tableName = 'stress_tests';
+        else if (r.type === 'anxiety') tableName = 'anxiety_tests';
+        else if (r.type === 'depression') tableName = 'depression_tests';
+
+        if (tableName) {
+          let maxBefore = 0;
+          let maxAfter = 0;
+        
+          const [before] = await db.query(`SELECT score FROM ${tableName} WHERE user_id=? AND created_at < ? ORDER BY created_at DESC LIMIT 1`, [studentId, r.completed_at]);
+          if(before.length && before[0].score > maxBefore) maxBefore = before[0].score;
+
+          const [after] = await db.query(`SELECT score FROM ${tableName} WHERE user_id=? AND created_at >= ? ORDER BY created_at DESC LIMIT 1`, [studentId, r.completed_at]);
+          if(after.length && after[0].score > maxAfter) maxAfter = after[0].score;
+
+          if (maxBefore > 0 && maxAfter > 0) {
+            if (maxAfter < maxBefore) support.outcome = "Improved";
+            else if (maxAfter === maxBefore) support.outcome = "No Change";
+            else support.outcome = "Needs Attention";
+            support.outcomeDetails = `${maxBefore} → ${maxAfter}`;
+          }
+        }
+      }
+      supports.push(support);
+    }
+
+    res.json({ success: true, supports });
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Error fetching support state" });
+  }
+};

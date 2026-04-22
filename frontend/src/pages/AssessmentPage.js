@@ -38,7 +38,7 @@ function AssessmentPage({ type, user, onComplete }) {
     const insight = await getAssessmentInsight(type, score, risk.label);
     setAiInsight(insight);
   } catch {
-    setAiInsight("Default message...");
+    setAiInsight("");
   }
 
   // 🔥 IMPORTANT FIX
@@ -210,13 +210,13 @@ function AssessmentPage({ type, user, onComplete }) {
   // ── Result Screen ──
   if (phase === "result" && result) {
     const nextSteps =
-      result.score >= 70
+      result.score >= 80
         ? [
             { icon: "📞", title: "Talk to Counselor", desc: "Schedule a session with the campus counseling center" },
             { icon: "💬", title: "Chat with Mira",    desc: "Our AI chatbot is available 24/7 for support" },
             { icon: "📔", title: "Journal Your Feelings", desc: "Writing can help process difficult emotions" },
           ]
-        : result.score >= 45
+        : result.score >= 50
         ? [
             { icon: "🧘", title: "Try Meditation", desc: "10 minutes daily can reduce symptoms significantly" },
             { icon: "🚶", title: "Take a Walk",    desc: "Physical activity naturally boosts mood" },
@@ -270,81 +270,83 @@ function AssessmentPage({ type, user, onComplete }) {
           </div>
 
           {/* AI Insight */}
-          <div
-            className="card animate-fadeUp"
-            style={{ padding: 36, display: "flex", flexDirection: "column" }}
-          >
-            <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 20 }}>
-              <div
-                style={{
-                  width: 40, height: 40,
-                  background: "linear-gradient(135deg, var(--blue), var(--teal))",
-                  borderRadius: 10,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 18, flexShrink: 0,
-                }}
-              >
-                🤖
-              </div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 15, color: "var(--gray-900)" }}>
-                  Mira's Analysis
-                </div>
-                <div style={{ fontSize: 12, color: "var(--gray-300)" }}>
-                  AI Mental Health Companion
-                </div>
-              </div>
-            </div>
-
-            {loading ? (
-              <div
-                style={{
-                  flex: 1, display: "flex",
-                  alignItems: "center", justifyContent: "center",
-                }}
-              >
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
-                    {[0, 1, 2].map((i) => (
-                      <span
-                        key={i}
-                        className="typing-dot"
-                        style={{ animationDelay: `${i * 0.15}s` }}
-                      />
-                    ))}
-                  </div>
-                  <p style={{ fontSize: 13, color: "var(--gray-300)" }}>
-                    Analyzing your responses...
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div style={{ flex: 1 }}>
-                <p
+          {(loading || aiInsight) && (
+            <div
+              className="card animate-fadeUp"
+              style={{ padding: 36, display: "flex", flexDirection: "column" }}
+            >
+              <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 20 }}>
+                <div
                   style={{
-                    color: "var(--gray-700)",
-                    lineHeight: 1.8,
-                    fontSize: 15,
-                    fontStyle: "italic",
+                    width: 40, height: 40,
+                    background: "linear-gradient(135deg, var(--blue), var(--teal))",
+                    borderRadius: 10,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 18, flexShrink: 0,
                   }}
                 >
-                  "{aiInsight}"
+                  🤖
+                </div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: "var(--gray-900)" }}>
+                    Mira's Analysis
+                  </div>
+                  <div style={{ fontSize: 12, color: "var(--gray-300)" }}>
+                    AI Mental Health Companion
+                  </div>
+                </div>
+              </div>
+
+              {loading ? (
+                <div
+                  style={{
+                    flex: 1, display: "flex",
+                    alignItems: "center", justifyContent: "center",
+                  }}
+                >
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+                      {[0, 1, 2].map((i) => (
+                        <span
+                          key={i}
+                          className="typing-dot"
+                          style={{ animationDelay: `${i * 0.15}s` }}
+                        />
+                      ))}
+                    </div>
+                    <p style={{ fontSize: 13, color: "var(--gray-300)" }}>
+                      Analyzing your responses...
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ flex: 1 }}>
+                  <p
+                    style={{
+                      color: "var(--gray-700)",
+                      lineHeight: 1.8,
+                      fontSize: 15,
+                      fontStyle: "italic",
+                    }}
+                  >
+                    "{aiInsight}"
+                  </p>
+                </div>
+              )}
+
+              <div
+                style={{
+                  borderTop: "1px solid var(--gray-100)",
+                  paddingTop: 16, marginTop: 16,
+                }}
+              >
+                <p style={{ fontSize: 12, color: "var(--gray-300)" }}>
+                  ⚠️ This is a screening tool, not a clinical diagnosis. If you're
+                  struggling, please reach out to a mental health professional.
                 </p>
               </div>
-            )}
-
-            <div
-              style={{
-                borderTop: "1px solid var(--gray-100)",
-                paddingTop: 16, marginTop: 16,
-              }}
-            >
-              <p style={{ fontSize: 12, color: "var(--gray-300)" }}>
-                ⚠️ This is a screening tool, not a clinical diagnosis. If you're
-                struggling, please reach out to a mental health professional.
-              </p>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Next Steps */}

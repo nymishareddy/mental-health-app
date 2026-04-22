@@ -32,7 +32,7 @@ exports.sendAlert = async (req, res) => {
       text: `Your ward ${student.name} has been identified with high ${type} levels. Counseling is recommended.`,
     });
 
-    await db.query("INSERT IGNORE INTO email_alerts_log (student_id) VALUES (?)", [studentId]);
+    await db.query("INSERT INTO email_alerts_log (student_id, type) VALUES (?, ?) ON DUPLICATE KEY UPDATE type=type", [studentId, type]);
 
     res.json({ success: true, message: "Parent formally notified." });
   } catch (err) {
@@ -43,12 +43,12 @@ exports.sendAlert = async (req, res) => {
 
 exports.assignCounselor = async (req, res) => {
   try {
-    const { studentId, counselorName } = req.body;
+    const { studentId, type, counselorName } = req.body;
     const teacherId = req.user.id;
 
     await db.query(
-      "INSERT INTO counselor_assignments (student_id, teacher_id, counselor_name) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE counselor_name = ?",
-      [studentId, teacherId, counselorName, counselorName]
+      "INSERT INTO counselor_assignments (student_id, type, teacher_id, counselor_name) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE counselor_name = ?",
+      [studentId, type, teacherId, counselorName, counselorName]
     );
 
     res.json({ success: true, message: `Successfully assigned to ${counselorName}`});
@@ -60,24 +60,92 @@ exports.assignCounselor = async (req, res) => {
 
 exports.getAlertsStatus = async (req, res) => {
   try {
-    const [counselorRows] = await db.query("SELECT student_id, counselor_name as assignedCounselor FROM counselor_assignments");
-    const [emailRows] = await db.query("SELECT student_id, 1 as emailSent FROM email_alerts_log");
+    const [counselorRows] = await db.query("SELECT student_id, type, counselor_name as assignedCounselor, status, session_notes, completed_at, follow_up_date FROM counselor_assignments");
+    const [emailRows] = await db.query("SELECT student_id, type, 1 as emailSent FROM email_alerts_log");
 
     const statusMap = {};
     
     emailRows.forEach(r => {
-      if (!statusMap[r.student_id]) statusMap[r.student_id] = {};
-      statusMap[r.student_id].emailSent = true;
+      const key = `${r.student_id}_${r.type}`;
+      if (!statusMap[key]) statusMap[key] = {};
+      statusMap[key].emailSent = true;
     });
 
-    counselorRows.forEach(r => {
-      if (!statusMap[r.student_id]) statusMap[r.student_id] = {};
-      statusMap[r.student_id].assignedCounselor = r.assignedCounselor;
-    });
+    for (const r of counselorRows) {
+      const key = `${r.student_id}_${r.type}`;
+      if (!statusMap[key]) statusMap[key] = {};
+      statusMap[key].assignedCounselor = r.assignedCounselor;
+      statusMap[key].status = r.status;
+      statusMap[key].sessionNotes = r.session_notes;
+      statusMap[key].completedAt = r.completed_at;
+      statusMap[key].followUpDate = r.follow_up_date;
+
+      // Predict Outcome if completed
+      if (r.status === 'completed' && r.completed_at) {
+        let tableName;
+        if (r.type === 'stress') tableName = 'stress_tests';
+        else if (r.type === 'anxiety') tableName = 'anxiety_tests';
+        else if (r.type === 'depression') tableName = 'depression_tests';
+
+        if (tableName) {
+          let maxBefore = 0;
+          let maxAfter = 0;
+          
+          const [before] = await db.query(`SELECT score FROM ${tableName} WHERE user_id=? AND created_at < ? ORDER BY created_at DESC LIMIT 1`, [r.student_id, r.completed_at]);
+          if(before.length && before[0].score > maxBefore) maxBefore = before[0].score;
+
+          const [after] = await db.query(`SELECT score FROM ${tableName} WHERE user_id=? AND created_at >= ? ORDER BY created_at DESC LIMIT 1`, [r.student_id, r.completed_at]);
+          if(after.length && after[0].score > maxAfter) maxAfter = after[0].score;
+
+          if (maxBefore > 0 && maxAfter > 0) {
+            if (maxAfter < maxBefore) statusMap[key].outcome = "Improved";
+            else if (maxAfter === maxBefore) statusMap[key].outcome = "No Change";
+            else statusMap[key].outcome = "Needs Attention";
+            statusMap[key].outcomeDetails = `${maxBefore} → ${maxAfter}`;
+          }
+        }
+      }
+    }
 
     res.json({ success: true, statusMap });
   } catch(err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Error fetching states" });
+  }
+};
+
+exports.updateAssignmentStatus = async (req, res) => {
+  try {
+    const { studentId, type, status } = req.body;
+    await db.query("UPDATE counselor_assignments SET status = ? WHERE student_id = ? AND type = ?", [status, studentId, type]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+};
+
+exports.completeSession = async (req, res) => {
+  try {
+    const { studentId, type, notes } = req.body;
+    await db.query(
+      "UPDATE counselor_assignments SET status = 'completed', session_notes = ?, completed_at = NOW() WHERE student_id = ? AND type = ?",
+      [notes, studentId, type]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+};
+
+exports.scheduleFollowup = async (req, res) => {
+  try {
+    const { studentId, type, date } = req.body;
+    await db.query("UPDATE counselor_assignments SET follow_up_date = ? WHERE student_id = ? AND type = ?", [date, studentId, type]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
   }
 };
