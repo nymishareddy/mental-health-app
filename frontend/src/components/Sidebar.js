@@ -10,6 +10,7 @@ const STUDENT_NAV = [
   { id: "support",         icon: "🛡️", label: "My Support"     },
   { id: "chatbot",         icon: "💬", label: "AI Chatbot"     },
   { id: "journal",         icon: "📔", label: "My Journal"     },
+  { id: "ai-insights",     icon: "🧠", label: "AI Insights"    },
   { id: "recommendations", icon: "🌟", label: "Recommendations"},
   { id: "profile",         icon: "👤", label: "Profile"        },
 ];

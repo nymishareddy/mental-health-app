@@ -14,6 +14,7 @@ import TeacherDashboard   from "./pages/TeacherDashboard";
 import RiskAlertsPage     from "./pages/RiskAlertsPage";
 import AnalyticsPage      from "./pages/AnalyticsPage";
 import SupportStatusPage  from "./pages/SupportStatusPage";
+import AIInsightsPage     from "./pages/AIInsightsPage";
 import { getUserData, getJournalEntries } from "./utils/api";
 
 // Components
@@ -123,6 +124,8 @@ function App() {
         return <ChatbotPage user={user} />;
       case "journal":
         return <JournalPage user={user} entries={journalEntries} setEntries={setJournalEntries} />;
+      case "ai-insights":
+        return <AIInsightsPage user={user} />;
       case "recommendations":
         return <RecommendationsPage scores={scores} />;
       case "profile":
