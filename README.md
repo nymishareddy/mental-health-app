@@ -1,4 +1,4 @@
-# 🧠 Swasthya Initiative AI — Mental Health Monitoring System
+# 🧠 Swasthya Initiative — Mental Health Monitoring System
 
 > AI-Based Mental Health Monitoring and Support System for Students
 
