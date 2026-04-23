@@ -11,7 +11,7 @@ function LandingPage({ onGetStarted }) {
   ];
 
   const techStack = [
-    "React.js", "Chart.js", "MySQL Schema", "Python ML", "Sentiment Analysis",
+    "React.js", "Node.js", "Express.js", "MySQL", "REST APIs", "JWT Authentication", "NodeMailer", "Chart.js", "Full-Stack Architecture", "Data Analytics", "Rule-Based Intelligence", "Mental Health Monitoring"
   ];
 
   return (
@@ -42,19 +42,10 @@ function LandingPage({ onGetStarted }) {
             >
               <span style={{ fontSize: 18 }}>🧠</span>
             </div>
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: 22,
-                color: "var(--gray-900)",
-              }}
-            >
+            <span style={{ fontWeight: "bold", fontSize: "18px", color: "var(--gray-900)" }}>
               Swasthya Initiative
             </span>
           </div>
-          <button className="btn btn-primary" onClick={onGetStarted}>
-            Get Started →
-          </button>
         </nav>
 
         {/* ── Hero ── */}
@@ -90,23 +81,16 @@ function LandingPage({ onGetStarted }) {
           <div
             style={{
               display: "flex",
-              gap: 14,
               justifyContent: "center",
-              flexWrap: "wrap",
+              marginTop: 10,
             }}
           >
             <button
               className="btn btn-primary"
               onClick={onGetStarted}
-              style={{ padding: "14px 32px", fontSize: 16 }}
+              style={{ padding: "16px 40px", fontSize: 18, borderRadius: "30px" }}
             >
               Start Your Journey
-            </button>
-            <button
-              className="btn btn-secondary"
-              style={{ padding: "14px 32px", fontSize: 16 }}
-            >
-              Watch Demo
             </button>
           </div>
         </div>

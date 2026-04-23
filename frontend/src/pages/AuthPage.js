@@ -215,35 +215,6 @@ function AuthPage({ onLogin }) {
             />
           ) : mode === "login" ? "Login →" : "Create Account →"}
         </button>
-
-        {/* Demo Access */}
-        <div
-          style={{
-            marginTop: 24, paddingTop: 24,
-            borderTop: "1px solid var(--gray-100)",
-            textAlign: "center",
-          }}
-        >
-          <p style={{ fontSize: 12, color: "var(--gray-300)", marginBottom: 12 }}>
-            Quick Demo Access
-          </p>
-          <div style={{ display: "flex", gap: 10 }}>
-            <button
-              className="btn btn-secondary"
-              onClick={() => loginAsDemo("student")}
-              style={{ flex: 1, justifyContent: "center", fontSize: 12 }}
-            >
-              👩‍🎓 Student Demo
-            </button>
-            <button
-              className="btn btn-ghost"
-              onClick={() => loginAsDemo("teacher")}
-              style={{ flex: 1, justifyContent: "center", fontSize: 12 }}
-            >
-              👨‍🏫 Teacher Demo
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
