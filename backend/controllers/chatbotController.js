@@ -1,8 +1,4 @@
-// ============================================================
 // CHATBOT CONTROLLER
-// Proxies chatbot requests to Claude API server-side,
-// keeping the API key safe on the backend.
-// ============================================================
 const https = require("https");
 
 // ── POST /api/chatbot ─────────────────────────────────────────

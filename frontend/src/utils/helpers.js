@@ -1,19 +1,13 @@
-// ============================================================
-// UTILITY HELPERS
-// ============================================================
 
-/**
- * Returns risk metadata for a given score (0–100).
- */
+// UTILITY HELPERS
+
 export const getRiskLevel = (score) => {
   if (score >= 80) return { label: "High Risk",  color: "#ef4444", bg: "#fef2f2", emoji: "⚠️" };
   if (score >= 50) return { label: "Moderate",   color: "#f59e0b", bg: "#fffbeb", emoji: "📊" };
   return               { label: "Normal",     color: "#22c55e", bg: "#f0fdf4", emoji: "✅" };
 };
 
-/**
- * Returns a CSS color string based on score severity.
- */
+
 export const getScoreColor = (score) => {
   if (score >= 80) return "#ef4444";
   if (score >= 50) return "#f59e0b";

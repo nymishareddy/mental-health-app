@@ -1,8 +1,6 @@
 import React from "react";
 
-/**
- * Wraps every page with consistent padding, max-width, and title block.
- */
+
 function AppLayout({ children, title, subtitle }) {
   return (
     <div

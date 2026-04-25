@@ -119,6 +119,4 @@ INSERT IGNORE INTO users (name, email, password, role, dept, age, parent_consent
   ('Priya Nair',      'priya@student.edu',  '$2a$12$demoHashPriyaXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 'student', 'Electronics',      20, 0),
   ('Prof. Ramesh Kumar','ramesh@college.edu','$2a$12$demoHashRameshXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX','teacher','CSE',             NULL, 0);
 
--- ============================================================
--- END OF SCHEMA
--- ============================================================
+

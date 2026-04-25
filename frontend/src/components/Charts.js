@@ -1,9 +1,5 @@
 import React from "react";
-
-// ============================================================
-// CHART COMPONENTS (Pure SVG — no external library required)
-// ============================================================
-
+// CHART COMPONENTS 
 /**
  * Line chart with gradient fill.
  * @param {Array}  data   - [{value: number}]

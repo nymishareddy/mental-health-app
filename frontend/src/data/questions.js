@@ -1,7 +1,5 @@
-// ============================================================
+
 // ASSESSMENT QUESTIONS
-// Based on PSS (Stress), GAD-7 (Anxiety), PHQ-9 (Depression)
-// ============================================================
 
 export const STRESS_QUESTIONS = [
   {

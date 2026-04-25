@@ -1,6 +1,6 @@
 import React from "react";
 
-// Navigation config per role
+// Navigation 
 const STUDENT_NAV = [
   { id: "dashboard",       icon: "🏠", label: "Dashboard"      },
   { id: "stress-test",     icon: "😤", label: "Stress Test"    },

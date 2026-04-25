@@ -41,7 +41,7 @@ function AssessmentPage({ type, user, onComplete }) {
     setAiInsight("");
   }
 
-  // 🔥 IMPORTANT FIX
+  
   const res = await submitAssessment(user.id, type, score, answers);
   console.log("SUBMIT RESPONSE:", res);
 
@@ -49,7 +49,7 @@ function AssessmentPage({ type, user, onComplete }) {
   setLoading(false);
 };
 
-  // ── Intro Screen ──
+  
   if (phase === "intro") {
     return (
       <AppLayout title={config.title} subtitle={config.subtitle}>
@@ -90,7 +90,7 @@ function AssessmentPage({ type, user, onComplete }) {
     );
   }
 
-  // ── Test Screen ──
+  
   if (phase === "test") {
     const q = config.questions[current];
     return (

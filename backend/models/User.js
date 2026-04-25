@@ -1,6 +1,5 @@
-// ============================================================
-// USER MODEL — SQL helpers for the `users` table
-// ============================================================
+// USER MODEL — users table
+
 const db = require("../config/db");
 
 const User = {

@@ -1,9 +1,6 @@
 import React from "react";
 
-/**
- * Displays a dismissible warning banner when any score
- * is in the high-risk zone (≥ 70).
- */
+
 function AlertBanner({ scores, onDismiss }) {
   const high = [];
   if (scores.stress     >= 70) high.push("Stress");

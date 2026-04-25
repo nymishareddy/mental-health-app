@@ -1,6 +1,4 @@
-// ============================================================
 // JOURNAL CONTROLLER
-// ============================================================
 const Journal = require("../models/Journal");
 const db = require("../config/db");
 

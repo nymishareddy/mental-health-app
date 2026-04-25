@@ -1,6 +1,4 @@
-// ============================================================
 // ASSESSMENT MODEL — SQL helpers for stress/anxiety/depression tests
-// ============================================================
 const db = require("../config/db");
 
 const Assessment = {

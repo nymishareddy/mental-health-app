@@ -1,6 +1,4 @@
-// ============================================================
 // AUTH MIDDLEWARE — Validates JWT on protected routes
-// ============================================================
 const jwt = require("jsonwebtoken");
 
 const protect = (req, res, next) => {

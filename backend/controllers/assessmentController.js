@@ -1,6 +1,5 @@
-// ============================================================
 // ASSESSMENT CONTROLLER
-// ============================================================
+
 const Assessment = require("../models/Assessment");
 const db = require("../config/db");
 

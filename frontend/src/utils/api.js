@@ -1,16 +1,10 @@
-// ============================================================
 // API UTILITIES
-// Centralises all calls and backend REST endpoints.
-// ============================================================
-//import Sentiment from "sentiment";
-//const sentimentAnalyzer = new Sentiment();
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
-// ── Claude AI (Anthropic) ─────────────────────────────────────
 
 /**
- * Calls the Anthropic Messages API.
+ 
  * @param {Array}  messages    - [{role, content}]
  * @param {string} systemPrompt
  * @param {number} maxTokens

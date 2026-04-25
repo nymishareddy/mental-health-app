@@ -20,11 +20,10 @@ import { getUserData, getJournalEntries } from "./utils/api";
 // Components
 import Sidebar from "./components/Sidebar";
 
-// ============================================================
 // ROOT APP — Screen & Page Router
-// ============================================================
+
 function App() {
-  const [screen,         setScreen]         = useState("landing"); // landing | auth | app
+  const [screen,         setScreen]         = useState("landing"); 
   const [user,           setUser]           = useState(null);
   const [activePage,     setActivePage]     = useState("dashboard");
   const [alertDismissed, setAlertDismissed] = useState(false);
@@ -35,15 +34,15 @@ function App() {
   });
   const [journalEntries, setJournalEntries] = useState([]);
 
-  // ── Auth handlers ──
+
   const handleLogin = async (userData) => {
   setUser(userData);
 
-  // 🔥 Fetch data from backend
+
   const data = await getUserData(userData.id);
   console.log("Fetched Data:", data);
 
-  // 👉 Extract latest scores (simple logic)
+
   let stress = 0, anxiety = 0, depression = 0;
 
   if (data) {
@@ -58,10 +57,10 @@ function App() {
     }
   }
 
-  // ✅ Set scores from DB
+  
   setScores({ stress, anxiety, depression });
 
-  // 🔥 Fetch journal entries
+  
   const entriesData = await getJournalEntries(userData.id);
   if (entriesData && entriesData.success && entriesData.entries) {
     setJournalEntries(entriesData.entries);
@@ -69,7 +68,7 @@ function App() {
     setJournalEntries(entriesData);
   }
 
-  // 👉 Navigate
+  
   setActivePage(userData.role === "teacher" ? "teacher-dashboard" : "dashboard");
   setScreen("app");
 };

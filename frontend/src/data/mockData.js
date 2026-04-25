@@ -1,6 +1,5 @@
 // ============================================================
 // MOCK DATA — Replace with real API calls in production
-// ============================================================
 
 export const INITIAL_STUDENTS = [
   {

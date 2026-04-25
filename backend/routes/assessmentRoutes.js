@@ -1,6 +1,4 @@
-// ============================================================
 // ASSESSMENT ROUTES
-// ============================================================
 const express    = require("express");
 const router     = express.Router();
 const { submit, getHistory, getClassStats, getUserAssessments, getAnalytics, getMySupport } = require("../controllers/assessmentController");

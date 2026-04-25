@@ -1,6 +1,5 @@
-// ============================================================
 // DATABASE CONFIG — MySQL connection pool
-// ============================================================
+
 const mysql  = require("mysql2/promise");
 require("dotenv").config();
 
@@ -19,7 +18,7 @@ const pool = mysql.createPool({
 (async () => {
   try {
     const conn = await pool.getConnection();
-    console.log("✅ MySQL connected successfully");
+    console.log("MySQL connected successfully");
     conn.release();
   } catch (err) {
     console.warn("⚠️  MySQL not connected — running in mock mode:", err.message);

@@ -4,7 +4,7 @@ const { sendAlert, assignCounselor, getAlertsStatus, updateAssignmentStatus, com
 const { protect, requireRole } = require("../middleware/auth");
 
 router.use(protect);
-router.use(requireRole("teacher")); // Only teachers permitted globally
+router.use(requireRole("teacher")); 
 
 router.get("/alerts-status", getAlertsStatus);
 router.post("/send-alert", sendAlert);
